@@ -339,9 +339,11 @@ function App() {
     Analytics: "Analytics",
   };
 
-  const searchPlaceholder =
-    activePage === "Patients"
-      ? "Search patients..."
+const searchPlaceholder =
+  activePage === "Patients"
+    ? "Search patients..."
+    : activePage === "Doctors"
+      ? "Search doctors..."
       : "Search appointments...";
 
   return (
@@ -832,44 +834,60 @@ function App() {
             </section>
           )}
 
-          {activePage === "Doctors" && (
-            <>
-              <section className="welcome-row">
-                <div>
-                  <p className="eyebrow">CLINIC TEAM</p>
-                  <h2>Our doctors</h2>
-                  <p className="welcome-description">
-                    Choose a doctor to schedule a visit.
-                  </p>
-                </div>
-              </section>
 
-              <section className="directory-grid">
-                {doctors.map((doctor) => (
-                  <div className="panel doctor-card" key={doctor.name}>
-                    <div className={`doctor-avatar avatar-${doctor.color}`}>
-                      <Stethoscope size={25} />
-                    </div>
+{activePage === "Doctors" && (
+  <>
+    <section className="welcome-row">
+      <div>
+        <p className="eyebrow">CLINIC TEAM</p>
+        <h2>Our doctors</h2>
+        <p className="welcome-description">
+          Choose a doctor to schedule a visit.
+        </p>
+      </div>
+    </section>
 
-                    <h3>{doctor.name}</h3>
-                    <p>{doctor.specialty}</p>
+    <section className="directory-grid">
+      {doctors
+        .filter((doctor) =>
+          `${doctor.name} ${doctor.specialty}`
+            .toLowerCase()
+            .includes(search.trim().toLowerCase())
+        )
+        .map((doctor) => (
+          <div className="panel doctor-card" key={doctor.name}>
+            <div className={`doctor-avatar avatar-${doctor.color}`}>
+              <Stethoscope size={25} />
+            </div>
 
-                    <div className="doctor-availability">
-                      <span className="online-dot" />
-                      Available for booking
-                    </div>
+            <h3>{doctor.name}</h3>
+            <p>{doctor.specialty}</p>
 
-                    <button
-                      className="secondary-button full-button"
-                      onClick={() => openNewAppointment(doctor.name)}
-                    >
-                      Book appointment <ArrowUpRight size={16} />
-                    </button>
-                  </div>
-                ))}
-              </section>
-            </>
-          )}
+            <div className="doctor-availability">
+              <span className="online-dot" />
+              Available for booking
+            </div>
+
+            <button
+              className="secondary-button full-button"
+              onClick={() => openNewAppointment(doctor.name)}
+            >
+              Book appointment <ArrowUpRight size={16} />
+            </button>
+          </div>
+        ))}
+
+      {doctors.filter((doctor) =>
+        `${doctor.name} ${doctor.specialty}`
+          .toLowerCase()
+          .includes(search.trim().toLowerCase())
+      ).length === 0 && (
+        <p className="empty-state">No matching doctors found.</p>
+      )}
+    </section>
+  </>
+)}
+
 
           {activePage === "Calendar" && (
             <section className="panel">
