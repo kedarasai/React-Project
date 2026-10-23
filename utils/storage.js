@@ -79,3 +79,31 @@ export function saveAppointments(appointments) {
     return false;
   }
 }
+const NOTIFICATIONS_KEY = "careflow_notifications_v1";
+
+export function loadNotifications() {
+  try {
+    const saved = localStorage.getItem(NOTIFICATIONS_KEY);
+
+    if (saved === null) {
+      return [];
+    }
+
+    const parsed = JSON.parse(saved);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export function saveNotifications(notifications) {
+  try {
+    localStorage.setItem(
+      NOTIFICATIONS_KEY,
+      JSON.stringify(notifications)
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
