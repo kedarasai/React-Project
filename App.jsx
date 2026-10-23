@@ -128,6 +128,8 @@ function formatTime(time) {
 function App() {
   const [activePage, setActivePage] = useState("Dashboard");
   const [appointments, setAppointments] = useState(() => loadAppointments());
+  const [notifications, setNotifications] = useState(() => loadNotifications());
+  const [showNotifications, setShowNotifications] = useState(false);
   const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -138,6 +140,9 @@ function App() {
   useEffect(() => {
     saveAppointments(appointments);
   }, [appointments]);
+  useEffect(() => {
+    saveNotifications(notifications);
+  }, [notifications]);
 
   const today = getToday();
 
