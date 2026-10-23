@@ -22,10 +22,14 @@ import {
   CircleAlert,
 } from "lucide-react";
 import "./styles.css";
+
 import {
   loadAppointments,
   saveAppointments,
+  loadNotifications,
+  saveNotifications,
 } from "./utils/storage.js";
+
 
 const navigation = [
   { label: "Dashboard", icon: LayoutDashboard },
