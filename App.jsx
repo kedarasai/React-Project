@@ -322,6 +322,7 @@ function App() {
       };
 
       setAppointments((current) => [...current, newAppointment]);
+      addAppointmentNotifications(newAppointment);
       setNotice("Appointment created successfully.");
     }
 
@@ -492,14 +493,66 @@ const searchPlaceholder =
               <kbd>⌕</kbd>
             </label>
 
-            <button
-              className="icon-button notification-button"
-              aria-label="Notifications"
-              onClick={() => setNotice("You're all caught up on notifications.")}
-            >
-              <Bell size={19} />
-              <span />
-            </button>
+
+<div className="notification-wrapper">
+  <button
+    className="icon-button notification-button"
+    aria-label="Notifications"
+    aria-expanded={showNotifications}
+    onClick={() => setShowNotifications((open) => !open)}
+  >
+    <Bell size={19} />
+    {notifications.some((item) => !item.read) && (
+      <span className="notification-dot" />
+    )}
+  </button>
+
+  {showNotifications && (
+    <div className="notification-dropdown">
+      <div className="notification-header">
+        <strong>Notifications</strong>
+        <button
+          className="text-button"
+          onClick={() =>
+            setNotifications((current) =>
+              current.map((item) => ({ ...item, read: true }))
+            )
+          }
+        >
+          Mark all read
+        </button>
+      </div>
+
+      {notifications.length === 0 ? (
+        <p className="empty-state">No notifications yet.</p>
+      ) : (
+        notifications.map((item) => (
+          <button
+            key={item.id}
+            className={`notification-item ${item.read ? "read" : "unread"}`}
+            onClick={() =>
+              setNotifications((current) =>
+                current.map((notification) =>
+                  notification.id === item.id
+                    ? { ...notification, read: true }
+                    : notification
+                )
+              )
+            }
+          >
+            <strong>{item.title}</strong>
+            <span className="notification-audience">
+              For: {item.audience}
+            </span>
+            <span>{item.message}</span>
+            <small>{new Date(item.createdAt).toLocaleString()}</small>
+          </button>
+        ))
+      )}
+    </div>
+  )}
+</div>
+
 
             <div className="avatar avatar-header">AD</div>
           </div>
