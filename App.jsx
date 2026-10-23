@@ -222,7 +222,32 @@ function App() {
     setEditingAppointment(null);
     setError("");
   }
+  
+  function addAppointmentNotifications(appointment) {
+  const newNotifications = [
+    {
+      id: Date.now() + "-doctor",
+      audience: "Doctor",
+      title: "New appointment booked",
+      message: `${appointment.patient} booked an appointment with you on ${appointment.date} at ${appointment.time}.`,
+      read: false,
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: Date.now() + "-patient",
+      audience: "Patient",
+      title: "Appointment confirmation",
+      message: `Your appointment with ${appointment.doctor} is on ${appointment.date} at ${appointment.time}.`,
+      read: false,
+      createdAt: new Date().toISOString(),
+    },
+  ];
 
+  setNotifications((current) => [
+    ...newNotifications,
+    ...current,
+  ]);
+}
   function handleAppointmentSubmit(event) {
     event.preventDefault();
     setError("");
